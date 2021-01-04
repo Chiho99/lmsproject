@@ -1,0 +1,1 @@
+SECRET_KEY = '&$mcv0yys)89!^ywg=zm&pvjrkx^(=r^kie)=(2_uyis!681nc'
