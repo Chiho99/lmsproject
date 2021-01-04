@@ -1,0 +1,59 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    /* background-color: aquamarine; */
+
+}
+
+.container {
+    /* background-color: aqua; */
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 3%;
+   
+}
+table {
+    width: 100%;
+    table-layout: fixed;
+    /* background-color: blueviolet; */
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+th {
+    background-color: rgba(39, 59, 76, 0.83);
+    color: white;
+    font-weight: lighter;
+}
+.delete_btn {
+    background-color: #d9534f;
+}
+.rows {
+    color: black;
+}
+
+.rows:nth-child(odd) {
+    background-color: rgb(85, 151, 193);
+    color: white;
+}
+
+.tb_1 {
+    width: 30%;
+}
+
+.tb_2 {
+    width: 40%;
+}

@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="{% static 'style.css' %}" type="text/css" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/035034ff28.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+      <div class="container">
+        <table class="tb_1" border='5'>
+        <tr>
+          <th>Month, Year</th>
+          <td width='40'></td>
+        </tr>
+        <tr>
+          <th>Total Hour</th>
+          <td width='40'></td>
+        </tr>
+        </table>
+        <table class="tb_2" border='5'>
+        <tr>
+          <th><a href="{% url 'goal' %}">Goal <i class="far fa-plus-square"></i></a></th>
+          <td width='100'> hours</td>
+        </tr>
+        <tr>
+          <th><a href="">X more hours to reach goal <i class="far fa-plus-square"></i></a></th>
+          <td width='100'>hours</td>
+        </tr>
+        </table>
+        <table class="tb_3" border='10'>
+        <tr>
+          <th>No.</th>
+          <th>DATE</th>
+          <th><a href="{% url 'finish' %}">START/FINISH <i class="far fa-plus-square"></i></th>
+          {% comment %} <th>DURATION</th> {% endcomment %}
+          {% comment %} <th>TOTAL</th> {% endcomment %}
+          <th>MEMO</th>
+          <th>DELETE RECORD</th>
+        </tr>   
+        {% comment %} 繰り返し文 {% endcomment %}
+        {% for item in object_list %}
+        <tr class="rows" width="80">
+          <td>{{ item.id }}</td>
+          <td>{{ item.date|date:"M d, Y"}}</td>
+          {% comment %} <td>{{ item.start }}</td> {% endcomment %}
+          <td>
+          {{ item.time|date:"H:i:s" }}
+           {% if item.id|divisibleby:"2" %}
+            <p>Finish</p>
+          {% else %}
+            <p>Start</p>
+          {% endif %}
+          </td>
+          {% comment %} <td>{{ item.time|date:"H:i:s" }}</td> {% endcomment %}
+          {% comment %} <td></td> {% endcomment %}
+          <td>{{ item.memo }}</td>
+          <td class="delete_btn"><a href="{% url 'delete' item.pk %}" class="delete_btn">Delete</a></td>
+        </tr>
+        {% endfor %}
+        </table>
+        <script src="" async defer></script>
+      </div>
+    </body>
+</html>
