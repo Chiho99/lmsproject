@@ -7,37 +7,60 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{% static 'style.css' %}" type="text/css" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet">
         <script src="https://kit.fontawesome.com/035034ff28.js" crossorigin="anonymous"></script>
     </head>
     <body>
+      <header>Learning Management System</header>
       <div class="container">
-        <table class="tb_1" border='5'>
-        <tr>
-          <th>Month, Year</th>
-          <td width='40'></td>
-        </tr>
-        <tr>
-          <th>Total Hour</th>
-          <td width='40'></td>
-        </tr>
-        </table>
-        <table class="tb_2" border='5'>
-        <tr>
-          <th><a href="{% url 'goal' %}">Goal <i class="far fa-plus-square"></i></a></th>
-          <td width='100'> hours</td>
-        </tr>
-        <tr>
-          <th><a href="">X more hours to reach goal <i class="far fa-plus-square"></i></a></th>
-          <td width='100'>hours</td>
-        </tr>
-        </table>
-        <table class="tb_3" border='10'>
+        <div class="tb_left">
+          <table class="tb_1" border='5'>
+          <tr>
+            <th>Date</th>
+            <td>{{ current_time|date:"M, Y" }}</td>
+          </tr>
+          <tr>
+            <th>Goal:
+              <a href="{% url 'goal_set' %}">Set <i class="far fa-plus-square"></i></a> /
+              {% for latest_goal in goal %}
+              <a href="{% url 'goal_update' latest_goal.pk %}">Update <i class="far fa-plus-square"></i></a>
+              {% endfor %}
+            </th>
+            <td>
+              {% for latest_goal in goal %}
+                {{ latest_goal.goal }} hours / month
+              {% endfor %}
+            </td>
+          </tr>
+          <tr>
+            <th>
+              {% comment %} <a href="">Every day <i class="far fa-plus-square"></i></a> {% endcomment %}
+            </th>
+            <td>
+              {% for latest_goal in goal %}
+                {% with latest_goal.goal as dairy_goal %}
+                  {{ dairy_goal }} 
+                {% endwith %}    
+              {% endfor %}
+            hours / day</td>
+          </tr>
+          <tr>
+            <th>Total Hour</th>
+            <td></td>
+          </tr>
+          </table>
+          <div class="card">
+              <img src="{% static 'img/icon.png' %}">
+              <h6 class="card-title">UserName</h6>
+          </div>
+        </div> 
+        <table class="tb_2" border='10'>
         <tr>
           <th>No.</th>
           <th>DATE</th>
           <th><a href="{% url 'finish' %}">START/FINISH <i class="far fa-plus-square"></i></th>
-          {% comment %} <th>DURATION</th> {% endcomment %}
+          <th>DURATION</th>
           {% comment %} <th>TOTAL</th> {% endcomment %}
           <th>MEMO</th>
           <th>DELETE RECORD</th>
@@ -56,7 +79,30 @@
             <p>Start</p>
           {% endif %}
           </td>
-          {% comment %} <td>{{ item.time|date:"H:i:s" }}</td> {% endcomment %}
+          <td>
+            {% comment %} {% extends 'duration_cal.html' %} {% endcomment %}
+            {% for list in object_list %}
+              {% if list.id is item.id %}
+                  {% if list.id|divisibleby:"2" %} 
+                  {% comment %} Finish record's id(even No.column) {% endcomment %}
+                      {% with list.time as finish_time %} 
+                          {% for list in object_list %}
+                              {% comment %} Start record's id (odd No. column) {% endcomment %}
+                              {% if list.id|add:"1" is item.id %} 
+                                  {% with list.time as start_time %}
+                                      {% comment %} Duration(FINISH-START) {% endcomment %} 
+                                      {% with start_time|timesince:finish_time as duration %} 
+                                          {{ duration }}
+                                      {% endwith %}
+                                  {% endwith %}
+                              {% endif %}
+                          {% endfor %}
+                      {% endwith %}
+                  {% endif %}
+              {% endif %}
+            {% endfor %} 
+          </td>
+          {% comment %} Duration {% endcomment %}
           {% comment %} <td></td> {% endcomment %}
           <td>{{ item.memo }}</td>
           <td class="delete_btn"><a href="{% url 'delete' item.pk %}" class="delete_btn">Delete</a></td>
