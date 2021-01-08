@@ -44,11 +44,11 @@ def loginfunc(request):
 #     return render(request, 'list.html', {'context':context})
 
 @login_required #decorator   
-def listfunc(request, user_id):
-    user = get_object_or_404(User, pk=user_id)
-    context = {
-        'user': user,
-        }
+def listfunc(request):
+    # user = get_object_or_404(User, pk=user_id)
+    # context = {
+    #     'user': user,
+    #     }
     # table(tb_1) Date
     current_time = timezone.now()
     # table(tb_1) Goal
@@ -56,7 +56,7 @@ def listfunc(request, user_id):
     month = 30
     # table(tb_3) No.|Date|START/FINISH|MEMO
     object_list = LmsModel.objects.all()
-    return render(request, 'list.html', {'context':context,'current_time':current_time, 'goal':goal, 'month':month, 'object_list':object_list})
+    return render(request, 'list.html', {'current_time':current_time, 'goal':goal, 'month':month, 'object_list':object_list})
 
 
 class GoalCreate(CreateView):

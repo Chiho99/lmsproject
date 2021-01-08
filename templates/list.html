@@ -13,7 +13,6 @@
         <script src="https://kit.fontawesome.com/035034ff28.js" crossorigin="anonymous"></script>
     </head>
     <body>
-     {{ user.username }}
       <header>
       <div class="header">
         <div class="header_left">
@@ -65,7 +64,10 @@
           </table>
           <div class="card">
               <img src="{% static 'img/icon.png' %}">
-              <h6 class="card-title">UserName</h6>
+              <h6 class="card-title text-center" >
+                <span>Name: {{ user.username }}</span><br>
+                <span>Since: {{user.date_joined|date:"M d, Y"}}</span>
+              </h6>
           </div>
         </div> 
         <table class="tb_2" border='10'>
