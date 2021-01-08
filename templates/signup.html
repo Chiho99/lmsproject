@@ -1,0 +1,32 @@
+{% load static %}
+{% load filters %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet">
+        <script src="https://kit.fontawesome.com/035034ff28.js" crossorigin="anonymous"></script>
+    </head>
+    <body class="text-center" data-new-gr-c-s-check-loaded="14.987.0" data-gr-ext-installed="">
+      <header>Learning Management System</header>
+      <form class="form-signin" method="POST">
+      {% csrf_token %}
+        <h1 class="h3 mb-3 font-weight-normal">Please sign up</h1>
+        {{ error }}
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input type="text" id="inputEmail" class="form-control" placeholder="username" name="username" required autofocus/>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" id="inputPassword" class="form-control" placeholder="password" name="password" required/>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
+        Sign up
+        </button>
+        <a class="login" href="{% url 'login' %}">Already Have an Account→</a>
+        {% comment %} <p class="mt-5 mb-3 text-muted">© 2017-2018</p> {% endcomment %}
+      </form>
+</body>
+</html>

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from django.utils import timezone
+
 # Create your views here.
 def signupfunc(request):
     if request.method == "POST":
@@ -43,8 +44,8 @@ def listfunc(request):
     month = 30
     # table(tb_3) No.|Date|START/FINISH|MEMO
     object_list = LmsModel.objects.all()
-    #table(tb_3) Duration
     return render(request, 'list.html', {'current_time':current_time, 'goal':goal, 'month':month, 'object_list':object_list})
+
 
 class GoalCreate(CreateView):
     template_name = 'goal_set.html'
@@ -52,10 +53,16 @@ class GoalCreate(CreateView):
     fields = ('goal',)
     success_url = reverse_lazy('list')
 
+# Delete兼用(UpdateView使用しない)
 class GoalUpdate(UpdateView):
     template_name = 'goal_update.html'
     model = GoalModel
     fields = ('goal',)
+    success_url = reverse_lazy('list')
+
+class GoalDelete(DeleteView):
+    template_name = 'goalmodel_confirm_delete.html'
+    model = GoalModel
     success_url = reverse_lazy('list')
 
 class LmsFinish(CreateView):

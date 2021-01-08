@@ -1,4 +1,5 @@
 {% load static %}
+{% load filters %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,10 +23,11 @@
           </tr>
           <tr>
             <th>Goal:
-              <a href="{% url 'goal_set' %}">Set <i class="far fa-plus-square"></i></a> /
-              {% for latest_goal in goal %}
-              <a href="{% url 'goal_update' latest_goal.pk %}">Update <i class="far fa-plus-square"></i></a>
-              {% endfor %}
+              <a  href="{% url 'goal_set' %}" class="list_a">Set <i class="far fa-plus-square"></i></a>
+            {% for latest_goal in goal %}
+              {% comment %} <a href="{% url 'goal_update' latest_goal.pk %}">Update <i class="far fa-plus-square"></i></a> / {% endcomment %}
+              <a href="{% url 'goal_remove' latest_goal.pk %}" class="list_a"> / Update or Delete <i class="far fa-minus-square"></i></a>
+            {% endfor %}
             </th>
             <td>
               {% for latest_goal in goal %}
@@ -40,15 +42,16 @@
             <td>
               {% for latest_goal in goal %}
                 {% with latest_goal.goal as dairy_goal %}
-                  {{ dairy_goal }} 
+                {% comment %} division filter(filters.py) {% endcomment %}
+                  {{ dairy_goal|division:30 }} 
                 {% endwith %}    
               {% endfor %}
             hours / day</td>
           </tr>
-          <tr>
+          {% comment %} <tr>
             <th>Total Hour</th>
             <td></td>
-          </tr>
+          </tr> {% endcomment %}
           </table>
           <div class="card">
               <img src="{% static 'img/icon.png' %}">
@@ -59,7 +62,7 @@
         <tr>
           <th>No.</th>
           <th>DATE</th>
-          <th><a href="{% url 'finish' %}">START/FINISH <i class="far fa-plus-square"></i></th>
+          <th><a href="{% url 'finish' %}" class="list_a">START/FINISH <i class="far fa-plus-square"></i></th>
           <th>DURATION</th>
           {% comment %} <th>TOTAL</th> {% endcomment %}
           <th>MEMO</th>
@@ -68,19 +71,22 @@
         {% comment %} 繰り返し文 {% endcomment %}
         {% for item in object_list %}
         <tr class="rows" width="80">
-          <td>{{ item.id }}</td>
-          <td>{{ item.date|date:"M d, Y"}}</td>
-          {% comment %} <td>{{ item.start }}</td> {% endcomment %}
-          <td>
+        {% comment %} No.(record's id) {% endcomment %}
+          <td class="record_col">{{ item.id }}</td>
+          {% comment %} Date {% endcomment %}
+          <td class="date_row record_col">{{ item.date|date:"M d, Y"}}</td>
+          {% comment %} START/FINISH {% endcomment %}
+          <td class="record_col">
           {{ item.time|date:"H:i:s" }}
            {% if item.id|divisibleby:"2" %}
-            <p>Finish</p>
+            <span>Finish</span>
           {% else %}
-            <p>Start</p>
+            <span>Start</span>
           {% endif %}
           </td>
-          <td>
+          <td class="record_col">
             {% comment %} {% extends 'duration_cal.html' %} {% endcomment %}
+            {% comment %} {% with total_time as 0 %} {% endcomment %}
             {% for list in object_list %}
               {% if list.id is item.id %}
                   {% if list.id|divisibleby:"2" %} 
@@ -93,6 +99,15 @@
                                       {% comment %} Duration(FINISH-START) {% endcomment %} 
                                       {% with start_time|timesince:finish_time as duration %} 
                                           {{ duration }}
+                                          {% comment %} {% if duration|get_type == 'datetime.date' %}
+                                            date
+                                          {% elif duration|get_type == 'timesince.timesince' %}
+                                            time
+                                          {% elif duration|get_type == 'date.duration' %}
+                                            duration
+                                          {% else %}
+                                              Oh no!
+                                          {% endif %} {% endcomment %}
                                       {% endwith %}
                                   {% endwith %}
                               {% endif %}
@@ -100,16 +115,17 @@
                       {% endwith %}
                   {% endif %}
               {% endif %}
-            {% endfor %} 
+            {% endfor %}
+            {% comment %} {% endwith %} {% endcomment %}
           </td>
           {% comment %} Duration {% endcomment %}
           {% comment %} <td></td> {% endcomment %}
-          <td>{{ item.memo }}</td>
-          <td class="delete_btn"><a href="{% url 'delete' item.pk %}" class="delete_btn">Delete</a></td>
+          <td class="memo_row">{{ item.memo }}</td>
+          <td class="record_col delete_btn"><a href="{% url 'delete' item.pk %}" class="delete_btn list_a">Delete</a></td>
         </tr>
         {% endfor %}
         </table>
-        <script src="" async defer></script>
+        {% comment %} <script src="" async defer></script> {% endcomment %}
       </div>
     </body>
 </html>
